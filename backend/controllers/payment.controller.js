@@ -4,10 +4,10 @@ const Payment = require('../models/Payment.model');
 const Gig = require('../models/Gig.model');
 const { createNotification } = require('../utils/notification');
 
-const razorpay = new Razorpay({
+const razorpay = process.env.RAZORPAY_KEY_ID ? new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+}) : null;
 
 // @route POST /api/payments/create-order
 exports.createOrder = async (req, res) => {
