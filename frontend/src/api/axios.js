@@ -1,30 +1,20 @@
 import axios from 'axios';
 
-const api = axios.create({ baseURL: 'https://skillsphere-hs0k.onrender.com/api', headers: { 'Content-Type': 'application/json' } });
+const api = axios.create({
+  baseURL: 'https://skillsphere-hs0k.onrender.com/api',
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: false,
+});
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('accessToken');
-  if (token) config.headers.Authorization = 'Bearer ' + token;
+  if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
 api.interceptors.response.use(
   (res) => res,
   async (error) => {
-    const original = error.config;
-    if (error.response?.status === 401 && error.response?.data?.code === 'TOKEN_EXPIRED' && !original._retry) {
-      original._retry = true;
-      try {
-        const refreshToken = localStorage.getItem('refreshToken');
-        const { data } = await axios.post('/api/auth/refresh-token', { refreshToken });
-        localStorage.setItem('accessToken', data.accessToken);
-        original.headers.Authorization = 'Bearer ' + data.accessToken;
-        return api(original);
-      } catch {
-        localStorage.clear();
-        window.location.href = '/login';
-      }
-    }
     return Promise.reject(error);
   }
 );
