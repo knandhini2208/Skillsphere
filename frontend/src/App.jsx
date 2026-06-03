@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import GigMarketplace from './pages/GigMarketplace';
+import GigNew from './pages/GigNew';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -22,6 +23,7 @@ function AppRoutes() {
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/gigs" element={<ProtectedRoute><GigMarketplace /></ProtectedRoute>} />
+      <Route path="/gigs/new" element={<ProtectedRoute><GigNew /></ProtectedRoute>} />
       <Route path="*" element={<div style={{ textAlign:'center', padding:'4rem', fontFamily:"'DM Sans',sans-serif" }}><h1>404</h1></div>} />
     </Routes>
   );
