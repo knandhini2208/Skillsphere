@@ -55,11 +55,11 @@ app.use(cors({
 }));
 app.options('*', cors());
 
-// Rate Limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: 100,
   message: 'Too many requests from this IP, please try again later.',
+  validate: { xForwardedForHeader: false },
 });
 app.use('/api/', limiter);
 
@@ -97,7 +97,6 @@ app.use('/api/admin', adminRoutes);
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' });
 });
-
 // Global Error Handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
