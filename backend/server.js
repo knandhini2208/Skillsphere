@@ -32,9 +32,8 @@ const server = http.createServer(app);
 // Socket.IO setup
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL,
+    origin: '*',
     methods: ['GET', 'POST'],
-    credentials: true,
   },
 });
 initSocket(io);
@@ -46,11 +45,15 @@ app.set('io', io);
 connectDB();
 
 // Security Middleware
+// Security Middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CLIENT_URL,
-  credentials: true,
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: false,
 }));
+app.options('*', cors());
 
 // Rate Limiting
 const limiter = rateLimit({
